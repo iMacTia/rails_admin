@@ -21,7 +21,7 @@ module RailsAdmin
 
     def get_model
       @model_name = to_model_name(params[:model_name])
-      fail(RailsAdmin::ModelNotFound) unless (@abstract_model = RailsAdmin::AbstractModel.new(@model_name, current_customer))
+      fail(RailsAdmin::ModelNotFound) unless (@abstract_model = RailsAdmin::AbstractModel.new(@model_name))
       fail(RailsAdmin::ModelNotFound) if (@model_config = @abstract_model.config).excluded?
       @properties = @abstract_model.properties
     end

@@ -17,8 +17,8 @@ module RailsAdmin
         AbstractObject.new object
       end
 
-      def scoped
-        (Pundit.policy_scope(current_user, model) if current_user) || model.all
+      def scoped(user = nil)
+        (Pundit.policy_scope(user, model) if user) || model.all
       end
 
       def first(options = {}, scope = nil)

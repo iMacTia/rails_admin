@@ -3,7 +3,7 @@ require 'rails_admin/support/datetime'
 module RailsAdmin
   class AbstractModel
     cattr_accessor :all
-    attr_reader :adapter, :model_name, :current_user
+    attr_reader :adapter, :model_name
 
     class << self
       def reset
@@ -16,9 +16,9 @@ module RailsAdmin
       end
 
       alias_method :old_new, :new
-      def new(m, c_u = nil)
+      def new(m)
         m = m.constantize unless m.is_a?(Class)
-        (am = old_new(m, c_u)).model && am.adapter ? am : nil
+        (am = old_new(m)).model && am.adapter ? am : nil
       rescue LoadError, NameError
         puts "[RailsAdmin] Could not load model #{m}, assuming model is non existing. (#{$ERROR_INFO})" unless Rails.env.test?
         nil
@@ -43,9 +43,8 @@ module RailsAdmin
       end
     end
 
-    def initialize(model_or_model_name, current_user = nil)
+    def initialize(model_or_model_name)
       @model_name = model_or_model_name.to_s
-      @current_user = current_user
       ancestors = model.ancestors.collect(&:to_s)
       if ancestors.include?('ActiveRecord::Base') && !model.abstract_class?
         initialize_active_record
