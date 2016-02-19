@@ -16,9 +16,9 @@ module RailsAdmin
       end
 
       alias_method :old_new, :new
-      def new(m)
+      def new(m, c_u = nil)
         m = m.constantize unless m.is_a?(Class)
-        (am = old_new(m)).model && am.adapter ? am : nil
+        (am = old_new(m, c_u)).model && am.adapter ? am : nil
       rescue LoadError, NameError
         puts "[RailsAdmin] Could not load model #{m}, assuming model is non existing. (#{$ERROR_INFO})" unless Rails.env.test?
         nil
@@ -43,7 +43,7 @@ module RailsAdmin
       end
     end
 
-    def initialize(model_or_model_name, current_user)
+    def initialize(model_or_model_name, current_user = nil)
       @model_name = model_or_model_name.to_s
       @current_user = current_user
       ancestors = model.ancestors.collect(&:to_s)
