@@ -3,7 +3,7 @@ require 'rails_admin/support/datetime'
 module RailsAdmin
   class AbstractModel
     cattr_accessor :all
-    attr_reader :adapter, :model_name
+    attr_reader :adapter, :model_name, :current_user
 
     class << self
       def reset
@@ -43,8 +43,9 @@ module RailsAdmin
       end
     end
 
-    def initialize(model_or_model_name)
+    def initialize(model_or_model_name, current_user)
       @model_name = model_or_model_name.to_s
+      @current_user = current_user
       ancestors = model.ancestors.collect(&:to_s)
       if ancestors.include?('ActiveRecord::Base') && !model.abstract_class?
         initialize_active_record

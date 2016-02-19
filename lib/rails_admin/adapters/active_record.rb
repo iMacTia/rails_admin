@@ -18,7 +18,7 @@ module RailsAdmin
       end
 
       def scoped
-        model.all
+        (Pundit.policy_scope(current_user, model) if current_user) || model.all
       end
 
       def first(options = {}, scope = nil)
